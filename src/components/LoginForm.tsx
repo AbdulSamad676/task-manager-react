@@ -4,16 +4,19 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 // import axios from '../services/axios';
 // import { useNavigate } from 'react-router-dom';
 import { useStore } from '../stores';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
   const { loginUser } = useStore('auth');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const onFinish = (values: any) => {
     const payload = {
       email: values.email,
       password: values.password,
     };
-    loginUser(payload);
+    loginUser(payload).then(() => {
+      navigate('/profile');
+    });
     // axios.post('/v1/register', payload);
     console.log('Success:', values);
   };

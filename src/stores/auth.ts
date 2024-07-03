@@ -27,11 +27,13 @@ class AuthStore {
       const res = await axios.post('/v1/login', data);
       if (res.status == 200) {
         const { data } = res;
-        console.log('data in store', data);
+        // console.log('data in store', data);
         localStorage.setItem('logged', 'true');
-        localStorage.setItem('token', data?.data.access_token);
-        this.setUser(data?.data.user);
+        localStorage.setItem('token', data?.data.token);
+        // console.log('token in store', data?.data.access_token);
+        this.setUser(data?.data);
         // profile.getProfile().then((data: any) => {
+        console.log('user in store', data?.data.token);
         this.setAuthorize();
         this.setRole(data?.data.user.role);
         localStorage.setItem('userRole', data?.data.user.role);

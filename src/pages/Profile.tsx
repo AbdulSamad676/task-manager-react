@@ -1,37 +1,60 @@
-// import React, { useEffect } from 'react';
-// import axios from '../services/axios';
-// import { useStore } from '../stores'; // Ensure this path is correct
+// import { useStore } from '../stores';
 
+import { useEffect, useState } from 'react';
 import { useStore } from '../stores';
+import EditProfileModal from '../modals/EditProfileModal';
 
 const Profile: React.FC = () => {
-  const profileStore = useStore('profile');
-  // working
-  const getProfileData = () => {
-    // fetch('https://task-manager.codionslab.com/api/v1/profile')
-    //   .then((res) => {
-    //     console.log('profile', res);
-    //   })
-    //   .catch((err) => {
-    //     console.log('err', err);
-    //   });
-    profileStore.getProfile();
+  const { getProfile } = useStore('profile');
+  const [token, setToken] = useState<string | null>(null);
+  const [profile, setProfile] = useState<Profile>({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const handleEditProfile = () => {
+    setIsModalVisible(true);
   };
 
-  // useEffect(() => {
-  //   const profile = profileStore.getProfile();
-  //   console.log('✅ profile', profile);
-  // }, [profileStore]);
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
+  useEffect(() => {
+    // Retrieve the token from local storage
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+    getProfile(token)
+      .then((res: any) => {
+        setProfile(res);
+      })
+      .catch((err) => {
+        console.log('ERR', err);
+      });
+    // console.log('Token:', storedToken);
+  }, []);
 
+  console.log('big', profile);
   return (
     <div>
-      Profile
-      <button
-        className='bg-black text-white py-1 px-3 rounded-lg'
-        onClick={getProfileData}
-      >
-        get profile
-      </button>
+      <div className='welcomeText flex justify-center items-center p-4 rounded-lg bg-[#333] w-max mx-auto'>
+        <h2 className='text-xl font-semibold text-white'>
+          {' '}
+          WelCome {profile?.name}
+        </h2>
+      </div>
+      <div className='userType flex justify-between items-center flex-wrap my-5'>
+        <p className='text-xl font-medium  text-black py-1 px-3 rounded-lg'>
+          You are {profile?.role}
+        </p>
+        <button
+          className='bg-black text-white py-1 px-3 rounded-lg'
+          onClick={handleEditProfile}
+        >
+          Edit Profile
+        </button>
+      </div>
+      <EditProfileModal
+        visible={isModalVisible}
+        onClose={handleModalClose}
+        profile={profile}
+      />
     </div>
   );
 };
