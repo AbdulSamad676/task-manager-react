@@ -8,6 +8,10 @@ import { Button } from 'antd';
 
 function Authentication() {
   const [login, setLogin] = useState<boolean>(true);
+  const changeStatus = () => {
+    setLogin(true);
+  };
+
   return (
     <div className='flex flex-col  rounded-lg justify-center items-center bg-[#333] p-10 max-w-[500px] mx-auto'>
       <h3 className='text-xl font-semibold text-white my-3'>Welcome </h3>
@@ -34,7 +38,7 @@ function Authentication() {
         </button>
       </div>
       {/* <RegistrationForm /> */}
-      {login ? <LoginForm /> : <RegistrationForm />}
+      {login ? <LoginForm /> : <RegistrationForm changeStatus={changeStatus} />}
     </div>
   );
 }

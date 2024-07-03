@@ -1,9 +1,26 @@
 import React from 'react';
-import { Form, Input, Button, Radio } from 'antd';
+// import axios from '../services/axios';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
+import { useStore } from '../stores';
+// import { useNavigate } from 'react-router-dom';
+// import Password from 'antd/es/input/Password';
 
-const RegistrationForm: React.FC = () => {
+const RegistrationForm: React.FC = (props: any) => {
+  const { changeStatus } = props;
+  const { registerUser } = useStore('auth');
+  // const navigate = useNavigate();
   const onFinish = (values: any) => {
+    const payload = {
+      name: values.username,
+      email: values.email,
+      password: values.password,
+    };
+    registerUser(payload).then(() => {
+      changeStatus();
+    });
+    // navigate('/');
+
     console.log('Success:', values);
   };
 
@@ -45,16 +62,9 @@ const RegistrationForm: React.FC = () => {
 
       <Form.Item
         name='role'
-        rules={[{ required: true, message: 'Please select a role!' }]}
+        rules={[{ required: true, message: 'Please input your role!' }]}
       >
-        <Radio.Group>
-          <Radio value='admin' className='text-white'>
-            Admin
-          </Radio>
-          <Radio value='user' className='text-white'>
-            User
-          </Radio>
-        </Radio.Group>
+        <Input prefix={<UserOutlined />} placeholder='role' />
       </Form.Item>
 
       <Form.Item>

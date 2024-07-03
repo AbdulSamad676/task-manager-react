@@ -1,9 +1,20 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
+// import axios from '../services/axios';
+// import { useNavigate } from 'react-router-dom';
+import { useStore } from '../stores';
 
 const LoginForm: React.FC = () => {
+  const { loginUser } = useStore('auth');
+  // const navigate = useNavigate();
   const onFinish = (values: any) => {
+    const payload = {
+      email: values.email,
+      password: values.password,
+    };
+    loginUser(payload);
+    // axios.post('/v1/register', payload);
     console.log('Success:', values);
   };
 
