@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import axios from '../services/axios';
+// import profile from './profile';
 
 class AuthStore {
   isAuthorized = false;
@@ -12,6 +13,9 @@ class AuthStore {
   private setAuthorize() {
     this.isAuthorized = true;
     this.user = {};
+  }
+  private setUnAuthorize() {
+    this.isAuthorized = false;
   }
   private setUser(data: any) {
     this.user = data;
@@ -27,13 +31,13 @@ class AuthStore {
       const res = await axios.post('/v1/login', data);
       if (res.status == 200) {
         const { data } = res;
-        // console.log('data in store', data);
+        console.log('data in store', data.data);
         localStorage.setItem('logged', 'true');
         localStorage.setItem('token', data?.data.token);
         // console.log('token in store', data?.data.access_token);
         this.setUser(data?.data);
-        // profile.getProfile().then((data: any) => {
-        console.log('user in store', data?.data.token);
+        // profile.getProfile(data?.data.token).then((data: any) => {
+        // console.log('user in store', data);
         this.setAuthorize();
         this.setRole(data?.data.user.role);
         localStorage.setItem('userRole', data?.data.user.role);
@@ -54,11 +58,35 @@ class AuthStore {
         //   console.log(profile_data);
         //   localStorage.setItem('userType', profile_data?.type);
         // }
-        console.log(res);
+        console.log('register Response', res.data);
         // this.setUnAuthorize();
         localStorage.setItem('logged', 'true');
         localStorage.setItem('token', res.data.access_token);
       }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+
+  logoutUser = async (data: any) => {
+    try {
+      await axios
+        .post('/v1/logout', data)
+        .then((res) => {
+          if (res.status == 200) {
+            console.log('Out ');
+          }
+        })
+        .catch((err) => {
+          console.log('ERR:', err);
+        });
+      this.setUnAuthorize();
+      localStorage.removeItem('logged');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userRole');
+
+      return true;
     } catch (e) {
       console.log(e);
       return false;

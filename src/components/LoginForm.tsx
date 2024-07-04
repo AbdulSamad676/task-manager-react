@@ -14,11 +14,15 @@ const LoginForm: React.FC = () => {
       email: values.email,
       password: values.password,
     };
-    loginUser(payload).then(() => {
-      navigate('/profile');
+    loginUser(payload).then((res: any) => {
+      if (res.status == 200) {
+        navigate('/profile');
+        return;
+      }
+
+      console.log('ERR', res);
     });
     // axios.post('/v1/register', payload);
-    console.log('Success:', values);
   };
 
   const onFinishFailed = (errorInfo: any) => {

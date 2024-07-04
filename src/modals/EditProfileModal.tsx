@@ -31,7 +31,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       };
 
       await updateProfile(payload); // Wait for the updateProfile call to complete
-      alert('Profile updated');
+      // alert('Profile updated');
       onClose(); // Close the modal only after the profile is updated
       window.location.reload();
     } catch (err) {

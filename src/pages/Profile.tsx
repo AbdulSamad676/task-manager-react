@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '../stores';
 import EditProfileModal from '../modals/EditProfileModal';
+import { observer } from 'mobx-react-lite';
 
 const Profile: React.FC = () => {
   const { getProfile } = useStore('profile');
@@ -27,9 +28,8 @@ const Profile: React.FC = () => {
       .catch((err) => {
         console.log('ERR', err);
       });
-    // console.log('Token:', storedToken);
   }, []);
-
+  console.log('token in profile', token);
   console.log('big', profile);
   return (
     <div>
@@ -59,4 +59,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default observer(Profile);
