@@ -7,9 +7,9 @@ import { MdAddBox } from 'react-icons/md';
 import ProjectCard from '../components/ProjectCard';
 import AddProjectModal from '../modals/addProjectModal';
 function ProjectManagement() {
-  const { getProjects } = useStore('projects');
+  const { getProjects, createProject, projects } = useStore('projects');
   const { getUsers } = useStore('users');
-  const [projects, setProjects] = useState([]);
+  const [projectsData, setProjectsData] = useState([]);
   const [users, setUsers] = useState([]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -27,21 +27,27 @@ function ProjectManagement() {
     description: string;
     users: string[];
   }) => {
+    const payload = {
+      name: project.name,
+      description: project.description,
+    };
     // Handle the submitted project data
-    console.log(project);
+    createProject(payload)
+      .then((res) => {
+        console.log('project added', res);
+      })
+      .catch((err) => {
+        console.log('ERR:', err);
+      });
+
     setIsModalVisible(false);
   };
-
-  // Example available users array
-  const availableUsers = ['User1', 'User2', 'User3'];
-
-  // const addProject = () => {};
 
   useEffect(() => {
     getProjects()
       .then((res) => {
         // console.log('All projects', res?.data);
-        setProjects(res?.data);
+        setProjectsData(res?.data);
       })
       .catch((err) => {
         console.log('ERR:', err);
@@ -55,7 +61,7 @@ function ProjectManagement() {
         console.log('ERR:', err);
       });
   }, []);
-  console.log('✅ projects    ', projects);
+  console.log('✅ projects from store    ', projects);
   console.log('✅ users    ', users);
 
   return (
@@ -72,7 +78,7 @@ function ProjectManagement() {
       </div>
 
       <div className='projects flex flex-wrap gap-4'>
-        {projects?.map((item: any) => {
+        {projects?.data?.map((item: any) => {
           return <ProjectCard data={item} />;
         })}
       </div>

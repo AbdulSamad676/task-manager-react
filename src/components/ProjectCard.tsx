@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { MdAddBox } from 'react-icons/md';
+import { useStore } from '../stores';
+import { Spin } from 'antd';
+
 interface ProjectCardProps {
   data: any;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
+  const { deleteProject } = useStore('projects');
+  const [loading, setLoading] = useState(false);
+
+  const handleDeleteProject = () => {
+    setLoading(true);
+    deleteProject(data.id)
+      .then((res) => {
+        console.log('deleted', res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log('ERR:', err);
+        setLoading(false);
+      });
+  };
   return (
     <div className='projectCard p-3  rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-[45%] lg:w-[30%] '>
       <p className='projectName text-xl font-semibold '>{data?.name}</p>
@@ -34,9 +52,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
         <button className='bg-blue-500 text-white p-2 rounded-md'>
           <FaEdit fontSize={16} />
         </button>
-        <button className='bg-red-500 text-white p-2 rounded-md'>
-          {' '}
-          <MdDelete fontSize={16} />
+        <button
+          className='bg-red-500 text-white p-2 rounded-md'
+          onClick={handleDeleteProject}
+        >
+          {loading ? <Spin /> : <MdDelete fontSize={16} />}
         </button>
       </div>
     </div>
