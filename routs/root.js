@@ -5,6 +5,7 @@ import Profile from '../src/pages/Profile';
 import ProjectManagement from '../src/pages/ProjectManagement';
 import Taskmanagement from '../src/pages/Taskmanagement';
 import Users from '../src/pages/Users/Users';
+import ProjectDetails from '../src/pages/ProjectDetails';
 
 export const routesConfig = [
   {
@@ -12,7 +13,13 @@ export const routesConfig = [
     component: Authentication,
     layout: AuthLayout,
   },
+  {
+    path: '/project-details/:id',
+    component: ProjectDetails,
+    layout: DashboardLayout,
+  },
   // {
+  // path="/project/:id
   // 	path: '/auth/register',
   // 	component: Register,
   // 	layout: AuthLayout,

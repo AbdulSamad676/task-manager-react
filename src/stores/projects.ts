@@ -116,23 +116,20 @@ class ProjectStore {
         });
     });
   };
-  //   updateProfile = async (data: any) => {
-  //     return new Promise((resolve, reject) => {
-  //       //   alert('promise callseed');
-  //       axios
-  //         .post('/v1/profile', data)
-  //         .then((data) => {
-  //           console.log('update data', data);
-  //           //   Here I am having a responce with msg
-  //           this.setProfile(data.data);
-  //           resolve(data.data);
-  //         })
-  //         .catch((e) => {
-  //           console.log(e);
-  //           reject(false);
-  //         });
-  //     });
-  //   };
-  // }
+  getProject = async (id: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/v1/project/${id}`)
+        .then((res) => {
+          const projectData = res?.data?.data;
+          console.log('✅ res    ', projectData);
+          resolve(projectData);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
 }
 export default new ProjectStore();

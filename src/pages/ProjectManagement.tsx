@@ -56,6 +56,7 @@ function ProjectManagement() {
   useEffect(() => {
     getUsers();
   }, []);
+  console.log('✅ ProjectsData    ', projectsData);
 
   return (
     <div>
