@@ -24,6 +24,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
         console.log('ERR:', err);
         setLoading(false);
       });
+    // to remove user from a project you can set the user array and then manipulate
   };
   return (
     <div className='projectCard p-3  rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-[45%] lg:w-[30%] '>
@@ -41,9 +42,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
           return (
             <div className='singleUser bg-[#0f0e0eb7] flex  items-center gap-2 border p-3 rounded-md w-[45%] '>
               <p className='text-white text-[10px]'>{user.name}</p>
-              <button className='bg-red-500 text-white p-1 rounded-md'>
-                <MdDelete fontSize={16} />
-              </button>
             </div>
           );
         })}
