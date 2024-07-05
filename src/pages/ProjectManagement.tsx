@@ -10,7 +10,7 @@ function ProjectManagement() {
   const { getProjects, createProject, projects } = useStore('projects');
   const { getUsers } = useStore('users');
   const [projectsData, setProjectsData] = useState([]);
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -25,13 +25,12 @@ function ProjectManagement() {
   const handleSubmitProject = (project: {
     name: string;
     description: string;
-    users: string[];
   }) => {
     const payload = {
       name: project.name,
       description: project.description,
     };
-    // Handle the submitted project data
+
     createProject(payload)
       .then((res) => {
         console.log('project added', res);
@@ -52,17 +51,11 @@ function ProjectManagement() {
       .catch((err) => {
         console.log('ERR:', err);
       });
-    getUsers()
-      .then((res) => {
-        // console.log('All projects', res?.data);
-        setUsers(res?.data);
-      })
-      .catch((err) => {
-        console.log('ERR:', err);
-      });
   }, []);
-  console.log('✅ projects from store    ', projects);
-  console.log('✅ users    ', users);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <div>
@@ -78,7 +71,7 @@ function ProjectManagement() {
       </div>
 
       <div className='projects flex flex-wrap gap-4'>
-        {projects?.data?.map((item: any) => {
+        {projectsData?.map((item: any) => {
           return <ProjectCard data={item} />;
         })}
       </div>
@@ -86,7 +79,6 @@ function ProjectManagement() {
         visible={isModalVisible}
         onClose={handleCloseModal}
         onSubmit={handleSubmitProject}
-        availableUsers={users}
       />
     </div>
   );

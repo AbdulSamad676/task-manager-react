@@ -1,17 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { MdAddBox } from 'react-icons/md';
 import { useStore } from '../stores';
 import { Spin } from 'antd';
+import AddProjectModal from '../modals/addProjectModal';
+import AssignModal from '../modals/AssignProject';
 
 interface ProjectCardProps {
   data: any;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
-  const { deleteProject } = useStore('projects');
+  const { deleteProject, updateProject, assignProjectUser } =
+    useStore('projects');
+
   const [loading, setLoading] = useState(false);
+
+  // test
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAssignModalVisible, setisAssignModalVisible] = useState(false);
+
+  const handleEditProjectClick = () => {
+    setIsModalVisible(true);
+  };
+  const handleAssignProjectClick = () => {
+    setisAssignModalVisible(true);
+  };
+  const handleCloseAssignModal = () => {
+    setisAssignModalVisible(false);
+  };
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const projectId = data.id;
+  const handleUpdateProject = (updateData: any) => {
+    const payload = {
+      ...data,
+      name: updateData.name,
+      description: updateData.description,
+    };
+    updateProject(data.id, payload)
+      .then((res) => {
+        console.log('updated result:', res);
+      })
+      .catch((err) => {
+        console.log('✅ err:    ', err);
+      });
+    console.log('updated data', updateData);
+  };
+
+  const assignProject = (usersData: any) => {
+    console.log('Assigned users ids:', usersData?.users);
+    const payload = {
+      user_ids: usersData?.users,
+    };
+    assignProjectUser(projectId, payload)
+      .then((res) => {
+        console.log('Success Assigned', res);
+      })
+      .catch((err) => {
+        console.log('✅ ERR    ', err);
+      });
+  };
 
   const handleDeleteProject = () => {
     setLoading(true);
@@ -24,8 +77,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
         console.log('ERR:', err);
         setLoading(false);
       });
-    // to remove user from a project you can set the user array and then manipulate
   };
+
+  // to remove user from a project you can set the user array and then manipulate
+
   return (
     <div className='projectCard p-3  rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-[45%] lg:w-[30%] '>
       <p className='projectName text-xl font-semibold '>{data?.name}</p>
@@ -47,7 +102,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
         })}
       </div>
       <div className='buttons mt-3 flex gap-3 justify-end absolute right-2 bottom-2'>
-        <button className='bg-blue-500 text-white p-2 rounded-md'>
+        <button
+          className='bg-green-700 text-white p-2 rounded-md'
+          onClick={handleAssignProjectClick}
+        >
+          <FaEdit fontSize={16} />
+        </button>
+        <button
+          className='bg-blue-500 text-white p-2 rounded-md'
+          onClick={handleEditProjectClick}
+        >
           <FaEdit fontSize={16} />
         </button>
         <button
@@ -57,6 +121,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
           {loading ? <Spin /> : <MdDelete fontSize={16} />}
         </button>
       </div>
+      <AddProjectModal
+        visible={isModalVisible}
+        onClose={handleCloseModal}
+        onSubmit={handleUpdateProject}
+        data={data}
+      />
+      <AssignModal
+        visible={isAssignModalVisible}
+        onClose={handleCloseAssignModal}
+        onSubmit={assignProject}
+      />
     </div>
   );
 };

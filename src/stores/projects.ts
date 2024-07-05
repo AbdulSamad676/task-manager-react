@@ -5,7 +5,6 @@ class ProjectStore {
   project = {
     name: '',
     description: '',
-    users: [],
   };
   projects = [];
 
@@ -57,6 +56,22 @@ class ProjectStore {
     });
   };
 
+  updateProject = async (id: any, data: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`/v1/admin/project/${id}`, data)
+        .then(({ data }) => {
+          // this.setProject(data.data);
+          this.addProject(data.data);
+
+          resolve(data.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
   getProjects = async () => {
     return new Promise((resolve, reject) => {
       axios
@@ -77,6 +92,22 @@ class ProjectStore {
         .delete(`/v1/admin/project/${id}`)
         .then(() => {
           this.removeProject(id); // Remove the project from the projects array
+          resolve(true);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
+  assignProjectUser = async (id: any, data: any) => {
+    console.log('ID', id);
+
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`/v1/admin/project/${id}/assign`, data)
+        .then(() => {
+          console.log('Projects Assigned');
           resolve(true);
         })
         .catch((e) => {
