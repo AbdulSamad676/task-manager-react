@@ -2,12 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '../stores';
 
 // import { Button } from 'antd';
-import { MdDelete } from 'react-icons/md';
-import { FaEdit } from 'react-icons/fa';
+
 import { MdAddBox } from 'react-icons/md';
+import ProjectCard from '../components/ProjectCard';
+import AddProjectModal from '../modals/addProjectModal';
 function ProjectManagement() {
   const { getProjects } = useStore('projects');
+  const { getUsers } = useStore('users');
   const [projects, setProjects] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleAddProjectClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleSubmitProject = (project: {
+    name: string;
+    description: string;
+    users: string[];
+  }) => {
+    // Handle the submitted project data
+    console.log(project);
+    setIsModalVisible(false);
+  };
+
+  // Example available users array
+  const availableUsers = ['User1', 'User2', 'User3'];
+
+  // const addProject = () => {};
+
   useEffect(() => {
     getProjects()
       .then((res) => {
@@ -17,59 +46,42 @@ function ProjectManagement() {
       .catch((err) => {
         console.log('ERR:', err);
       });
+    getUsers()
+      .then((res) => {
+        // console.log('All projects', res?.data);
+        setUsers(res?.data);
+      })
+      .catch((err) => {
+        console.log('ERR:', err);
+      });
   }, []);
   console.log('✅ projects    ', projects);
+  console.log('✅ users    ', users);
 
   return (
     <div>
       <div className='title flex items-center gap-3 my-3'>
         {' '}
         <h2 className='text-xl font-bold '>Add Project</h2>
-        <button className='bg-green-700 text-white p-1 rounded-md'>
+        <button
+          className='bg-green-700 text-white p-1 rounded-md'
+          onClick={handleAddProjectClick}
+        >
           <MdAddBox fontSize={20} />
         </button>
       </div>
 
       <div className='projects flex flex-wrap gap-4'>
-        {projects?.map((item) => {
-          return (
-            <div className='projectCard p-3  rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-[45%] lg:w-[30%] '>
-              <p className='projectName text-xl font-semibold '>{item?.name}</p>
-              <p className=' text-[12px]  font-normal '>{item.description}</p>
-              <div className='userTitle flex  items-center gap-3 mt-3'>
-                {' '}
-                <h2 className='text-lg font-bold '>Users</h2>
-                <button className='bg-green-700 text-white p-1 rounded-md'>
-                  <MdAddBox fontSize={16} />
-                </button>
-              </div>
-              <div className='users flex gap-3 flex-wrap mt-3 pb-5 '>
-                {item?.users?.map((user) => {
-                  return (
-                    <div className='singleUser bg-[#0f0e0eb7] flex  items-center gap-2 border p-3 rounded-md w-[45%] '>
-                      <p className='text-white text-[10px]'>{user.name}</p>
-                      <button className='bg-red-500 text-white p-1 rounded-md'>
-                        <MdDelete fontSize={16} />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className='buttons mt-3 flex gap-3 justify-end absolute right-2 bottom-2'>
-                <button className='bg-blue-500 text-white p-2 rounded-md'>
-                  <FaEdit fontSize={16} />
-                </button>
-                <button className='bg-red-500 text-white p-2 rounded-md'>
-                  {' '}
-                  <MdDelete fontSize={16} />
-                </button>
-              </div>
-            </div>
-          );
+        {projects?.map((item: any) => {
+          return <ProjectCard data={item} />;
         })}
       </div>
-
-      {/* <button>get</button> */}
+      <AddProjectModal
+        visible={isModalVisible}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmitProject}
+        availableUsers={users}
+      />
     </div>
   );
 }
