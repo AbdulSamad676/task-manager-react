@@ -156,6 +156,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
         onClose={handleCloseAssignModal}
         onSubmit={assignProject}
       />
+      {role == 'user' ? (
+        <button
+          className='bg-purple-800 text-white p-2 rounded-md absolute right-2 bottom-1'
+          onClick={handleCardClick}
+        >
+          <FaTasks fontSize={16} />
+        </button>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

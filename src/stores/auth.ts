@@ -1,7 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import axios from '../services/axios';
+import { useStore } from '.';
 // import profile from './profile';
-
+const { addUser } = useStore('users');
 class AuthStore {
   isAuthorized = false;
   role = '';
@@ -53,11 +54,7 @@ class AuthStore {
       const res = await axios.post('/v1/register', data);
       console.log('api response', res);
       if (res.status == 200) {
-        // const profile_data = await profile.getProfile();
-        // if (profile_data) {
-        //   console.log(profile_data);
-        //   localStorage.setItem('userType', profile_data?.type);
-        // }
+        addUser(res.data);
         console.log('register Response', res.data);
         // this.setUnAuthorize();
         localStorage.setItem('logged', 'true');

@@ -9,6 +9,7 @@ const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>(); // Get the project ID from the URL
   const { getProject } = useStore('projects'); // Get the getProject function from your store
   const { getTasks, createTask } = useStore('tasks');
+  const { role } = useStore('auth');
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,6 +64,7 @@ const ProjectDetails = () => {
         });
 
       // get all tasks
+
       getTasks(id)
         .then((data: any) => {
           setTasks(data);
