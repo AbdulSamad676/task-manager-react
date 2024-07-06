@@ -4,19 +4,18 @@ import { useStore } from '../stores';
 
 const { Option } = Select;
 
-interface AssignModalProps {
+interface AssignTaskModalProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (project: { users: string[] }) => void;
+  onSubmit: (task: { users: string[] }) => void;
 }
 
-const AssignModal: React.FC<AssignModalProps> = ({
+const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
   visible,
   onClose,
   onSubmit,
 }) => {
   const { users } = useStore('users'); // Ensure this matches how you access your store
-  //   const users = UserStore.users; // Accessing raw users data from the store
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
@@ -25,15 +24,16 @@ const AssignModal: React.FC<AssignModalProps> = ({
   };
 
   const handleSubmit = () => {
-    onSubmit({ users: selectedUsers });
+    console.log('assigned user', selectedUsers);
+    onSubmit(selectedUsers);
     onClose();
   };
 
-  console.log('Users in Modal', users);
+  console.log('Users in Assign Modal', users);
 
   return (
     <Modal
-      title='Add Project'
+      title='Assign Task'
       visible={visible}
       onCancel={onClose}
       footer={[
@@ -48,7 +48,7 @@ const AssignModal: React.FC<AssignModalProps> = ({
       <Form layout='vertical' id='form' onFinish={handleSubmit}>
         <Form.Item label='Users'>
           <Select
-            mode='multiple'
+            mode='single'
             value={selectedUsers}
             onChange={handleUsersChange}
             placeholder='Select users'
@@ -65,4 +65,4 @@ const AssignModal: React.FC<AssignModalProps> = ({
   );
 };
 
-export default AssignModal;
+export default AssignTaskModal;

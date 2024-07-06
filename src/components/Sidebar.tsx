@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../stores'; // Adjust the path to your MobX store
 
 function Sidebar(): JSX.Element {
-  const { logoutUser } = useStore('auth');
+  const { logoutUser, role } = useStore('auth');
   const naviagte = useNavigate();
   const handleLogout = (): void => {
     const storedToken = localStorage.getItem('token');
@@ -19,6 +19,8 @@ function Sidebar(): JSX.Element {
     }
   };
 
+  console.log('✅ role    ', role);
+
   return (
     <div className='w-full flex flex-col gap-5 justify-between py-10 items-center px-3'>
       <div className='flex flex-col gap-3 mb-10 w-full'>
@@ -27,11 +29,15 @@ function Sidebar(): JSX.Element {
             <p className='text-xs font-bold'>Profile</p>
           </div>
         </Link>
-        <Link to='/users'>
-          <div className='icons hover:bg-[#333] py-2 px-3 rounded-md'>
-            <p className='text-xs font-bold'>Users</p>
-          </div>
-        </Link>
+        {role == 'admin' ? (
+          <Link to='/users'>
+            <div className='icons hover:bg-[#333] py-2 px-3 rounded-md'>
+              <p className='text-xs font-bold'>Users</p>
+            </div>
+          </Link>
+        ) : (
+          ''
+        )}
         <Link to='/project-management'>
           <div className='icons hover:bg-[#333] py-2 px-3 rounded-md'>
             <p className='text-xs font-bold'>Project Management</p>

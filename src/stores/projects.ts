@@ -131,5 +131,21 @@ class ProjectStore {
         });
     });
   };
+  // Get user Projct
+  getUserProjects = async () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/v1/project`)
+        .then((res) => {
+          const projectData = res?.data?.data;
+          console.log('✅ res    ', projectData);
+          resolve(projectData);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
 }
 export default new ProjectStore();

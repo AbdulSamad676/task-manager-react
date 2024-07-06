@@ -14,7 +14,7 @@ export const routesConfig = [
     layout: AuthLayout,
   },
   {
-    path: '/project-details/:id',
+    path: '/project-tasks/:id',
     component: ProjectDetails,
     layout: DashboardLayout,
   },

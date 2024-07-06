@@ -7,8 +7,10 @@ import { MdAddBox } from 'react-icons/md';
 import ProjectCard from '../components/ProjectCard';
 import AddProjectModal from '../modals/addProjectModal';
 function ProjectManagement() {
-  const { getProjects, createProject, projects } = useStore('projects');
+  const { getProjects, createProject, projects, getUserProjects } =
+    useStore('projects');
   const { getUsers } = useStore('users');
+  const { role } = useStore('auth');
   const [projectsData, setProjectsData] = useState([]);
   // const [users, setUsers] = useState([]);
 
@@ -43,18 +45,32 @@ function ProjectManagement() {
   };
 
   useEffect(() => {
-    getProjects()
-      .then((res) => {
-        // console.log('All projects', res?.data);
-        setProjectsData(res?.data);
-      })
-      .catch((err) => {
-        console.log('ERR:', err);
-      });
+    if (role == 'admin') {
+      // for admin
+      getProjects()
+        .then((res) => {
+          setProjectsData(res?.data);
+        })
+        .catch((err) => {
+          console.log('ERR:', err);
+        });
+    } else {
+      getUserProjects()
+        .then((res) => {
+          console.log('response', res);
+          setProjectsData(res?.data);
+        })
+        .catch((err) => {
+          console.log('ERR:', err);
+        });
+      // user
+    }
   }, []);
 
   useEffect(() => {
-    getUsers();
+    if (role == 'admin') {
+      getUsers();
+    }
   }, []);
   console.log('✅ ProjectsData    ', projectsData);
 
