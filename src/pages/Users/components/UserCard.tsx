@@ -11,9 +11,10 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ data }) => {
+  const userId = data?.id;
   //   const { deleteProject } = useStore('projects');
   const [loading, setLoading] = useState(false);
-  const { deleteUser } = useStore('users');
+  const { deleteUser, updateUser } = useStore('users');
 
   const handleDeleteProject = () => {
     setLoading(true);
@@ -44,22 +45,24 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
     password: string;
     role: string;
   }) => {
+    // Handle the submitted project data
     const payload = {
+      is_active: '1',
       name: user.name,
       email: user.email,
       password: user.password,
       role: user.role,
     };
     console.log('Updated user Data', payload);
-    // Handle the submitted project data
-    // createUser(payload)
-    //   .then((res) => {
-    //     console.log('project added', res);
-    //   })
-    //   .catch((err) => {
-    //     console.log('ERR:', err);
-    //   });
-    console.log('User added:', user);
+
+    updateUser(userId, payload)
+      .then((res) => {
+        console.log('updated result:', res);
+      })
+      .catch((err) => {
+        console.log('✅ err:    ', err);
+      });
+    // console.log('User Updated:', user);
     // Add the logic to handle the new user data here
     setIsModalVisible(false);
   };

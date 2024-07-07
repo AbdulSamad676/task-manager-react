@@ -16,7 +16,8 @@ class UserStore {
     this.user = data;
   };
   private setUsers = (data: any) => {
-    this.users = data;
+    // this.users = data;
+    this.users = [...this.users, data];
   };
   private removeUser = (id: any) => {
     this.users = this.users.filter((user) => user.id !== id);
@@ -46,6 +47,22 @@ class UserStore {
         .then(({ data }) => {
           this.setUser(data.data);
           this.addUser(data.data); // Add the new project to the projects array
+
+          resolve(data.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
+  updateUser = async (id: any, data: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`/v1/admin/user/${id}`, data)
+        .then(({ data }) => {
+          // this.setProject(data.data);
+          this.setUsers(data.data);
 
           resolve(data.data);
         })
