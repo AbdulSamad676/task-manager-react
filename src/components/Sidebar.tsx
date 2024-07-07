@@ -43,11 +43,6 @@ function Sidebar(): JSX.Element {
             <p className='text-xs font-bold'>Project Management</p>
           </div>
         </Link>
-        <Link to='/task-management'>
-          <div className='icons hover:bg-[#333] py-2 px-3 rounded-md'>
-            <p className='text-xs font-bold'>Task Management</p>
-          </div>
-        </Link>
       </div>
       <div
         className='flex flex-col justify-center items-center mt-3 w-full hover:bg-[#333] py-2 px-3 rounded-md'

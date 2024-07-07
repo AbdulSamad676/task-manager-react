@@ -4,6 +4,7 @@ import { FaEdit } from 'react-icons/fa';
 
 import { Spin } from 'antd';
 import { useStore } from '../../../stores';
+import AddUserModal from '../../../modals/addUserModal';
 
 interface UserCardProps {
   data: any;
@@ -25,7 +26,42 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
         console.log('ERR:', err);
         setLoading(false);
       });
-    // to remove user from a project you can set the user array and then manipulate
+  };
+  // to remove user from a project you can set the user array and then manipulate
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleEditUserClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleEditUser = (user: {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+  }) => {
+    const payload = {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+    };
+    console.log('Updated user Data', payload);
+    // Handle the submitted project data
+    // createUser(payload)
+    //   .then((res) => {
+    //     console.log('project added', res);
+    //   })
+    //   .catch((err) => {
+    //     console.log('ERR:', err);
+    //   });
+    console.log('User added:', user);
+    // Add the logic to handle the new user data here
+    setIsModalVisible(false);
   };
 
   return (
@@ -34,7 +70,10 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
       <p className=' text-[12px]  font-normal '>{data.email}</p>
 
       <div className='buttons mt-3 flex gap-3 justify-end absolute right-2 bottom-2'>
-        <button className='bg-blue-500 text-white p-2 rounded-md'>
+        <button
+          className='bg-blue-500 text-white p-2 rounded-md'
+          onClick={handleEditUserClick}
+        >
           <FaEdit fontSize={16} />
         </button>
         <button
@@ -44,6 +83,12 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
           {loading ? <Spin /> : <MdDelete fontSize={16} />}
         </button>
       </div>
+      <AddUserModal
+        visible={isModalVisible}
+        onClose={handleCloseModal}
+        onSubmit={handleEditUser}
+        data={data}
+      />
     </div>
   );
 };

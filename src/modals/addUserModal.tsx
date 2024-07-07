@@ -10,68 +10,57 @@ interface AddUserModalProps {
     password: string;
     role: string;
   }) => void;
+  data?: { name: string; email: string; password: string; role: string };
 }
 
 const AddUserModal: React.FC<AddUserModalProps> = ({
   visible,
   onClose,
   onSubmit,
+  data,
 }) => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [role, setRole] = useState<string>('');
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(e.target.value);
-  };
-
-  const handleSubmit = () => {
-    onSubmit({ name, email, password, role });
+  console.log('selectted user', data);
+  const handleSubmit = (values: any) => {
+    onSubmit({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      role: values.role,
+    });
     onClose();
   };
 
   return (
     <Modal
-      title='Add User'
+      title='User'
       visible={visible}
       onCancel={onClose}
       footer={[
         <Button key='cancel' onClick={onClose}>
           Cancel
         </Button>,
-        <Button key='submit' type='primary' onClick={handleSubmit}>
+        <Button key='submit' form='form' type='primary' htmlType='submit'>
           Submit
         </Button>,
       ]}
     >
-      <Form layout='vertical'>
-        <Form.Item label='Name'>
-          <Input value={name} onChange={handleNameChange} />
+      <Form
+        layout='vertical'
+        id='form'
+        onFinish={handleSubmit}
+        initialValues={data || { name: '', email: '', password: '', role: '' }}
+      >
+        <Form.Item label='Name' name='name'>
+          <Input value={data?.name} />
         </Form.Item>
-        <Form.Item label='Email'>
-          <Input type='email' value={email} onChange={handleEmailChange} />
+        <Form.Item label='Email' name='email'>
+          <Input type='email' value={data?.email} />
         </Form.Item>
-        <Form.Item label='Password'>
-          <Input
-            type='password'
-            value={password}
-            onChange={handlePasswordChange}
-          />
+        <Form.Item label='Password' name='password'>
+          <Input type='password' value={data?.password} />
         </Form.Item>
-        <Form.Item label='Role'>
-          <Input type='text' value={role} onChange={handleRoleChange} />
+        <Form.Item label='Role' name='role'>
+          <Input type='text' value={data?.role} />
         </Form.Item>
       </Form>
     </Modal>

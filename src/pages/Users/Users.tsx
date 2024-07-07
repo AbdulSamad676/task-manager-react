@@ -6,8 +6,8 @@ import { MdAddBox } from 'react-icons/md';
 import AddUserModal from '../../modals/addUserModal';
 
 const Users: React.FC = () => {
-  const { getUsers, createUser } = useStore('users');
-  const [users, setUsers] = useState<any[]>([]);
+  const { getUsers, createUser, users } = useStore('users');
+  const [usersData, setUsersData] = useState<any[]>([]);
   // const [loading, setLoading] = useState<boolean>(true);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -49,7 +49,7 @@ const Users: React.FC = () => {
     getUsers()
       .then((res) => {
         // console.log('All projects', res?.data);
-        setUsers(res?.data);
+        setUsersData(res?.data);
       })
       .catch((err) => {
         console.log('ERR:', err);
@@ -70,7 +70,7 @@ const Users: React.FC = () => {
       </div>
 
       <div className='usersList flex flex-wrap gap-4  '>
-        {users?.map((user) => (
+        {usersData?.map((user) => (
           <UserCard data={user} key={user.id} />
         ))}
       </div>

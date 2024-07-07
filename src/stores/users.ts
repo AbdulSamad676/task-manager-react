@@ -18,8 +18,8 @@ class UserStore {
   private setUsers = (data: any) => {
     this.users = data;
   };
-  private removeUser = (id: string) => {
-    this.users = this.users.filter((users) => users.id !== id);
+  private removeUser = (id: any) => {
+    this.users = this.users.filter((user) => user.id !== id);
   };
   addUser = (data: any) => {
     this.users = [...this.users, data];

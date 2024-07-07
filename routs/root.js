@@ -3,7 +3,7 @@ import DashboardLayout from '../src/layout/DashbordLayout';
 import Authentication from '../src/pages/Authentication';
 import Profile from '../src/pages/Profile';
 import ProjectManagement from '../src/pages/ProjectManagement';
-import Taskmanagement from '../src/pages/Taskmanagement';
+// import Taskmanagement from '../src/pages/Taskmanagement';
 import Users from '../src/pages/Users/Users';
 import ProjectDetails from '../src/pages/ProjectDetails';
 
@@ -18,12 +18,7 @@ export const routesConfig = [
     component: ProjectDetails,
     layout: DashboardLayout,
   },
-  // {
-  // path="/project/:id
-  // 	path: '/auth/register',
-  // 	component: Register,
-  // 	layout: AuthLayout,
-  // },
+
   {
     path: '/profile',
     component: Profile,
@@ -39,19 +34,9 @@ export const routesConfig = [
     component: ProjectManagement,
     layout: DashboardLayout,
   },
-  {
-    path: '/task-management',
-    component: Taskmanagement,
-    layout: DashboardLayout,
-  },
   // {
-  // 	path: '/calender',
-  // 	component: Calender,
-  // 	layout: DashboardLayout,
-  // },
-  // {
-  // 	path: '/profile',
-  // 	component: Profile,
-  // 	layout: DashboardLayout,
+  //   path: '/task-management',
+  //   component: Taskmanagement,
+  //   layout: DashboardLayout,
   // },
 ];
