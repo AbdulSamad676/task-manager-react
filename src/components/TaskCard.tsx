@@ -14,8 +14,13 @@ interface TaskCardProps {
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
-  const { deleteTask, updateTask, assignTaskUser, showComments } =
-    useStore('tasks');
+  const {
+    deleteTask,
+    updateTask,
+    assignTaskUser,
+    showComments,
+    deleteComment,
+  } = useStore('tasks');
   const { id } = useParams<{ id: string }>(); // Get the project ID from the URL
   const projectId = id;
   const taskId = taskData.id;
@@ -110,6 +115,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
       setDisplayComments(false);
     }
   };
+  // delete Comment
+
+  const handleDeleteComment = (commentID: any) => {
+    deleteComment(projectId, taskId, commentID)
+      .then((res: any) => {
+        console.log('✅ Comment removed    ', res);
+      })
+      .catch((err) => {
+        console.log('✅ err    ', err);
+      });
+    console.log('Comment ID', commentID);
+  };
 
   return (
     <div className='taskCard bg-gray-200 shadow-gray-500 p-4 rounded-lg mt-2 relative'>
@@ -134,10 +151,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
       </div>
       {displayComments && (
         <div className='commetns my-3 flex flex-col gap-2'>
-          {comments?.map((item: any) => {
+          {comments?.map((comment: any) => {
             return (
               <div className='comment p-2 border border-black rounded-md flex justify-between'>
-                <p className='text-xs'>{item.content}</p>
+                <p className='text-xs'>{comment.content}</p>
                 <div className='buttons flex gap-3 justify-end items-center'>
                   <button
                     className='bg-green-700 text-white p-1 text-xs rounded-md'
@@ -153,7 +170,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
                   </button>
                   <button
                     className='bg-red-500 text-white p-1 rounded-md'
-                    // onClick={handleDeleteTask}
+                    onClick={() => {
+                      handleDeleteComment(comment.id);
+                    }}
                   >
                     {loading ? <Spin /> : <MdDelete fontSize={12} />}
                   </button>
