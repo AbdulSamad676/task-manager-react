@@ -1,6 +1,8 @@
 import { Spin } from 'antd';
 import React, { useState } from 'react';
 import { FaEdit, FaTasks } from 'react-icons/fa';
+import { FaReplyAll } from 'react-icons/fa';
+import { MdAddBox } from 'react-icons/md';
 import { MdAssignmentInd, MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { useStore } from '../stores';
@@ -113,18 +115,49 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     <div className='taskCard bg-gray-200 shadow-gray-500 p-4 rounded-lg mt-2 relative'>
       <p className='text-base font-medium'>{taskData?.name}</p>
       <p className='text-[12px] font-normal'>{taskData?.description}</p>
-      <button
-        className='bg-blue-900 text-white py-1 px-3 rounded-md mt-3 flex justify-center items-center'
-        onClick={handleComments}
-      >
-        Show Commnets
-      </button>
+      <div className='commentButtons flex gap-7 items-center mt-5'>
+        <button
+          className='bg-blue-900 text-white py-1 px-3 rounded-md  flex justify-center items-center'
+          onClick={handleComments}
+        >
+          Show Commnets
+        </button>
+        <span className='flex gap-2 items-center'>
+          <p className='text-[18px] font-semibold text-black'>add</p>
+          <button
+            className='bg-green-900 text-white p-2 rounded-md  flex justify-center items-center'
+            onClick={handleComments}
+          >
+            <MdAddBox fontSize={16} />
+          </button>
+        </span>
+      </div>
       {displayComments && (
         <div className='commetns my-3 flex flex-col gap-2'>
           {comments?.map((item: any) => {
             return (
-              <div className='comment p-2 border border-black rounded-md'>
+              <div className='comment p-2 border border-black rounded-md flex justify-between'>
                 <p className='text-xs'>{item.content}</p>
+                <div className='buttons flex gap-3 justify-end items-center'>
+                  <button
+                    className='bg-green-700 text-white p-1 text-xs rounded-md'
+                    // onClick={handleAssignModalClick}
+                  >
+                    <FaReplyAll />
+                  </button>
+                  <button
+                    className='bg-blue-500 text-white p-1 rounded-md'
+                    // onClick={handleEditTaskClick}
+                  >
+                    <FaEdit fontSize={12} />
+                  </button>
+                  <button
+                    className='bg-red-500 text-white p-1 rounded-md'
+                    // onClick={handleDeleteTask}
+                  >
+                    {loading ? <Spin /> : <MdDelete fontSize={12} />}
+                  </button>
+                </div>
               </div>
             );
           })}
