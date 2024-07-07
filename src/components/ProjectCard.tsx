@@ -39,12 +39,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
     setIsModalVisible(false);
   };
 
-  // // check the role and then decide to display"
-  // if (role == 'admin') {
-  //   setShowData(true);
-  // } else {
-  //   setShowData(false);
-  // }
   const projectId = data.id;
   const handleUpdateProject = (updateData: any) => {
     const payload = {

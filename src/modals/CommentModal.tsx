@@ -7,7 +7,7 @@ interface CommentModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (comment: { content: string }) => void;
-  status: boolean;
+
   data?: {
     content: string;
   };
@@ -15,14 +15,14 @@ interface CommentModalProps {
 
 const CommentModal: React.FC<CommentModalProps> = ({
   visible,
-  status,
+
   onClose,
   onSubmit,
   data,
 }) => {
   const handleSubmit = (values: any) => {
     console.log('Submitted data', values);
-    onSubmit(values, status);
+    onSubmit(values);
     onClose();
   };
 
@@ -56,7 +56,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
           name='content'
           rules={[{ required: true, message: 'Please enter the Task name' }]}
         >
-          <Input type='text' />
+          <Input type='text' value={data?.content} />
         </Form.Item>
       </Form>
     </Modal>

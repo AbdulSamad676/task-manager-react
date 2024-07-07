@@ -9,6 +9,7 @@ import { useStore } from '../stores';
 import TaskModal from '../modals/TaskModal';
 import AssignTaskModal from '../modals/AssignTaskModal';
 import CommentModal from '../modals/CommentModal';
+import Comment from './Comment';
 
 interface TaskCardProps {
   taskData: any;
@@ -135,10 +136,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
   };
 
   // Submit Modal Funtion
-  const submitCommentModal = (
-    commentModaldData: { content: string },
-    status: any,
-  ) => {
+  const submitCommentModal = (commentModaldData: { content: string }) => {
     console.log('✅ CommentModal    ', commentModaldData);
     const payload = {
       // ...comment,
@@ -147,44 +145,43 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     };
     // the status means add modal true or false
     // if status is true then createComment and if false then updateComment
-    if (status) {
-      createComment(projectId, taskId, payload)
-        .then((res) => {
-          setAddComment(false);
-          setIsCommentModalVisible(false);
-        })
-        .catch((err) => {
-          console.log('✅ err in comment   ', err);
-          setAddComment(false);
-          setIsCommentModalVisible(false);
-        });
-    } else {
-      // update modal
-      updateComment(projectId, taskId, commentID, payload)
-        .then(() => {
-          setAddComment(true);
-          setIsCommentModalVisible(false);
-        })
-        .catch((err) => {
-          console.log('✅ err    ', err);
 
-          setAddComment(true);
-          setIsCommentModalVisible(false);
-        });
-    }
-  };
-  // End
-  // delete Comment
-  const handleDeleteComment = (commentID: any) => {
-    deleteComment(projectId, taskId, commentID)
-      .then((res: any) => {
-        console.log('✅ Comment removed    ', res);
+    createComment(projectId, taskId, payload)
+      .then((res) => {
+        setAddComment(false);
+        setIsCommentModalVisible(false);
       })
       .catch((err) => {
-        console.log('✅ err    ', err);
+        console.log('✅ err in comment   ', err);
+        setAddComment(false);
+        setIsCommentModalVisible(false);
       });
-    console.log('Comment ID', commentID);
+
+    // update modal
+    // updateComment(projectId, taskId, commentID, payload)
+    //   .then(() => {
+    //     setAddComment(true);
+    //     setIsCommentModalVisible(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log('✅ err    ', err);
+
+    //     setAddComment(true);
+    //     setIsCommentModalVisible(false);
+    //   });
   };
+  // End
+  // // delete Comment
+  // const handleDeleteComment = (commentID: any) => {
+  //   deleteComment(projectId, taskId, commentID)
+  //     .then((res: any) => {
+  //       console.log('✅ Comment removed    ', res);
+  //     })
+  //     .catch((err) => {
+  //       console.log('✅ err    ', err);
+  //     });
+  //   console.log('Comment ID', commentID);
+  // };
 
   return (
     <div className='taskCard bg-gray-200 shadow-gray-500 p-4 rounded-lg mt-2 relative'>
@@ -211,34 +208,36 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
         <div className='commetns my-3 flex flex-col gap-2'>
           {comments?.map((comment: any) => {
             return (
-              <div className='comment p-2 border border-black rounded-md flex justify-between'>
-                <p className='text-xs'>{comment.content}</p>
-                <div className='buttons flex gap-3 justify-end items-center'>
-                  <button
-                    className='bg-green-700 text-white p-1 text-xs rounded-md'
-                    // onClick={handleAssignModalClick}
-                  >
-                    <FaReplyAll />
-                  </button>
-                  <button
-                    className='bg-blue-500 text-white p-1 rounded-md'
-                    onClick={() => {
-                      setCommentID(comment.id);
-                      handleUpdateCommentClick();
-                    }}
-                  >
-                    <FaEdit fontSize={12} />
-                  </button>
-                  <button
-                    className='bg-red-500 text-white p-1 rounded-md'
-                    onClick={() => {
-                      handleDeleteComment(comment.id);
-                    }}
-                  >
-                    {loading ? <Spin /> : <MdDelete fontSize={12} />}
-                  </button>
-                </div>
-              </div>
+              <Comment comment={comment} key={comment.id} />
+              // remove
+              // <div className='comment p-2 border border-black rounded-md flex justify-between'>
+              //   <p className='text-xs'>{comment.content}</p>
+              //   <div className='buttons flex gap-3 justify-end items-center'>
+              //     <button
+              //       className='bg-green-700 text-white p-1 text-xs rounded-md'
+              //       // onClick={handleAssignModalClick}
+              //     >
+              //       <FaReplyAll />
+              //     </button>
+              //     <button
+              //       className='bg-blue-500 text-white p-1 rounded-md'
+              //       onClick={() => {
+              //         setCommentID(comment.id);
+              //         handleUpdateCommentClick();
+              //       }}
+              //     >
+              //       <FaEdit fontSize={12} />
+              //     </button>
+              //     <button
+              //       className='bg-red-500 text-white p-1 rounded-md'
+              //       onClick={() => {
+              //         handleDeleteComment(comment.id);
+              //       }}
+              //     >
+              //       {loading ? <Spin /> : <MdDelete fontSize={12} />}
+              //     </button>
+              //   </div>
+              // </div>
             );
           })}
         </div>
@@ -278,8 +277,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
         visible={isCommentModalVisible}
         onClose={handleCommentCloseModal}
         onSubmit={submitCommentModal}
-        data={taskData}
-        status={addComment}
       />
     </div>
   );
