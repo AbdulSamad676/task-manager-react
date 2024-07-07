@@ -145,6 +145,26 @@ class TaskStore {
         });
     });
   };
+  // Update Comment
+  updateComment = async (projectId: any, taskId: any, commentId, data: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(
+          `/v1/project/${projectId}/task/${taskId}/comment/${commentId}`,
+          data,
+        )
+        .then(({ data }) => {
+          //   this.setTa(data.data);
+          this.addComment(data.data);
+
+          resolve(data.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
   // Delete Comment
   deleteComment = async (projectId: any, taskId: any, commentId: any) => {
     return new Promise((resolve, reject) => {
@@ -152,7 +172,7 @@ class TaskStore {
         // /v1/project/project/task/task/comment/comment
         .delete(`/v1/project/${projectId}/task/${taskId}/comment/${commentId}`)
         .then(() => {
-          this.removeComment(taskId); // Remove the project from the projects array
+          this.removeComment(commentId); // Remove the project from the projects array
           resolve(true);
         })
         .catch((e) => {

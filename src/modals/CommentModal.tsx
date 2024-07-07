@@ -7,6 +7,7 @@ interface CommentModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (comment: { content: string }) => void;
+  status: boolean;
   data?: {
     content: string;
   };
@@ -14,13 +15,14 @@ interface CommentModalProps {
 
 const CommentModal: React.FC<CommentModalProps> = ({
   visible,
+  status,
   onClose,
   onSubmit,
   data,
 }) => {
   const handleSubmit = (values: any) => {
     console.log('Submitted data', values);
-    onSubmit(values);
+    onSubmit(values, status);
     onClose();
   };
 

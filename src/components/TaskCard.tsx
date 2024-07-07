@@ -21,16 +21,19 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     assignTaskUser,
     showComments,
     createComment,
+    updateComment,
     deleteComment,
   } = useStore('tasks');
   const { id } = useParams<{ id: string }>(); // Get the project ID from the URL
   const projectId = id;
   const taskId = taskData.id;
+  const [commentID, setCommentID] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
   const [isAssignModalVisible, setisAssignModalVisible] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [addComment, setAddComment] = useState(false);
   const [displayComments, setDisplayComments] = useState(false);
   // console.log('project Id:', id);
 
@@ -120,6 +123,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
   };
   // Comment Modal:
   const handleAddCommentClick = () => {
+    setAddComment(true);
+    setIsCommentModalVisible(true);
+  };
+  const handleUpdateCommentClick = () => {
+    setAddComment(false);
     setIsCommentModalVisible(true);
   };
   const handleCommentCloseModal = () => {
@@ -127,19 +135,43 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
   };
 
   // Submit Modal Funtion
-  const submitCommentModal = (commentModaldData: { content: string }) => {
+  const submitCommentModal = (
+    commentModaldData: { content: string },
+    status: any,
+  ) => {
     console.log('✅ CommentModal    ', commentModaldData);
     const payload = {
+      // ...comment,
       parent_id: null,
       content: commentModaldData.content,
     };
-    createComment(projectId, taskId, payload)
-      .then((res) => {
-        setIsCommentModalVisible(false);
-      })
-      .catch((err) => {
-        console.log('✅ err in comment   ', err);
-      });
+    // the status means add modal true or false
+    // if status is true then createComment and if false then updateComment
+    if (status) {
+      createComment(projectId, taskId, payload)
+        .then((res) => {
+          setAddComment(false);
+          setIsCommentModalVisible(false);
+        })
+        .catch((err) => {
+          console.log('✅ err in comment   ', err);
+          setAddComment(false);
+          setIsCommentModalVisible(false);
+        });
+    } else {
+      // update modal
+      updateComment(projectId, taskId, commentID, payload)
+        .then(() => {
+          setAddComment(true);
+          setIsCommentModalVisible(false);
+        })
+        .catch((err) => {
+          console.log('✅ err    ', err);
+
+          setAddComment(true);
+          setIsCommentModalVisible(false);
+        });
+    }
   };
   // End
   // delete Comment
@@ -190,7 +222,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
                   </button>
                   <button
                     className='bg-blue-500 text-white p-1 rounded-md'
-                    // onClick={handleEditTaskClick}
+                    onClick={() => {
+                      setCommentID(comment.id);
+                      handleUpdateCommentClick();
+                    }}
                   >
                     <FaEdit fontSize={12} />
                   </button>
@@ -244,6 +279,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
         onClose={handleCommentCloseModal}
         onSubmit={submitCommentModal}
         data={taskData}
+        status={addComment}
       />
     </div>
   );
