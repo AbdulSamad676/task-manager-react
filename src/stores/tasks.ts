@@ -25,6 +25,9 @@ class TaskStore {
   private setComments = (data: any) => {
     this.comments = data;
   };
+  private addComment = (data: any) => {
+    this.comments.push(data);
+  };
   private removeComment = (id: string) => {
     this.comments = this.comments.filter((comment: any) => comment.id !== id);
   };
@@ -117,6 +120,23 @@ class TaskStore {
           console.log('✅ comment in store    ', data.data);
 
           this.setComments(data.data);
+          resolve(data.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
+  // add/create  Comment
+  createComment = async (projectId: any, taskID: any, data: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`/v1/project/${projectId}/task/${taskID}/comment`, data)
+        .then(({ data }) => {
+          //   this.setProject(data.data);
+          this.addComment(data.data); // Add the new project to the projects array
+
           resolve(data.data);
         })
         .catch((e) => {

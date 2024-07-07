@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useStore } from '../stores';
 import TaskModal from '../modals/TaskModal';
 import AssignTaskModal from '../modals/AssignTaskModal';
+import CommentModal from '../modals/CommentModal';
 
 interface TaskCardProps {
   taskData: any;
@@ -19,6 +20,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     updateTask,
     assignTaskUser,
     showComments,
+    createComment,
     deleteComment,
   } = useStore('tasks');
   const { id } = useParams<{ id: string }>(); // Get the project ID from the URL
@@ -26,6 +28,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
   const taskId = taskData.id;
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
   const [isAssignModalVisible, setisAssignModalVisible] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const [displayComments, setDisplayComments] = useState(false);
@@ -115,8 +118,31 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
       setDisplayComments(false);
     }
   };
-  // delete Comment
+  // Comment Modal:
+  const handleAddCommentClick = () => {
+    setIsCommentModalVisible(true);
+  };
+  const handleCommentCloseModal = () => {
+    setIsModalVisible(false);
+  };
 
+  // Submit Modal Funtion
+  const submitCommentModal = (commentModaldData: { content: string }) => {
+    console.log('✅ CommentModal    ', commentModaldData);
+    const payload = {
+      parent_id: null,
+      content: commentModaldData.content,
+    };
+    createComment(projectId, taskId, payload)
+      .then((res) => {
+        setIsCommentModalVisible(false);
+      })
+      .catch((err) => {
+        console.log('✅ err in comment   ', err);
+      });
+  };
+  // End
+  // delete Comment
   const handleDeleteComment = (commentID: any) => {
     deleteComment(projectId, taskId, commentID)
       .then((res: any) => {
@@ -143,7 +169,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
           <p className='text-[18px] font-semibold text-black'>add</p>
           <button
             className='bg-green-900 text-white p-2 rounded-md  flex justify-center items-center'
-            onClick={handleComments}
+            onClick={handleAddCommentClick}
           >
             <MdAddBox fontSize={16} />
           </button>
@@ -212,6 +238,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
         visible={isAssignModalVisible}
         onClose={handleCloseAssignModal}
         onSubmit={assignTask}
+      />
+      <CommentModal
+        visible={isCommentModalVisible}
+        onClose={handleCommentCloseModal}
+        onSubmit={submitCommentModal}
+        data={taskData}
       />
     </div>
   );
