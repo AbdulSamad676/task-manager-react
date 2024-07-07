@@ -12,13 +12,16 @@ interface TaskCardProps {
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
-  const { deleteTask, updateTask, assignTaskUser } = useStore('tasks');
+  const { deleteTask, updateTask, assignTaskUser, showComments } =
+    useStore('tasks');
   const { id } = useParams<{ id: string }>(); // Get the project ID from the URL
   const projectId = id;
   const taskId = taskData.id;
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAssignModalVisible, setisAssignModalVisible] = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [displayComments, setDisplayComments] = useState(false);
   // console.log('project Id:', id);
 
   const handleDeleteTask = () => {
@@ -90,10 +93,43 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     setIsModalVisible(false);
   };
 
+  const handleComments = async () => {
+    if (!displayComments) {
+      await showComments(projectId, taskId)
+        .then((res) => {
+          console.log('✅ res    ', res);
+          setComments(res);
+          setDisplayComments(true);
+        })
+        .catch((err) => {
+          console.log('ERR!!', err);
+        });
+    } else {
+      setDisplayComments(false);
+    }
+  };
+
   return (
     <div className='taskCard bg-gray-200 shadow-gray-500 p-4 rounded-lg mt-2 relative'>
       <p className='text-base font-medium'>{taskData?.name}</p>
       <p className='text-[12px] font-normal'>{taskData?.description}</p>
+      <button
+        className='bg-blue-900 text-white py-1 px-3 rounded-md mt-3 flex justify-center items-center'
+        onClick={handleComments}
+      >
+        Show Commnets
+      </button>
+      {displayComments && (
+        <div className='commetns my-3 flex flex-col gap-2'>
+          {comments?.map((item: any) => {
+            return (
+              <div className='comment p-2 border border-black rounded-md'>
+                <p className='text-xs'>{item.content}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div className='buttons mt-3 flex gap-3 justify-end absolute right-2 top-0'>
         <button
           className='bg-green-700 text-white p-1 rounded-md'

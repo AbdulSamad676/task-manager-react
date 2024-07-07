@@ -6,6 +6,7 @@ class TaskStore {
   //     name: '',
   //     email: '',
   //   };
+  comments = [];
   tasks = [];
 
   constructor() {
@@ -21,15 +22,9 @@ class TaskStore {
   private removeTask = (id: string) => {
     this.tasks = this.tasks.filter((task) => task.id !== id);
   };
-  //   private setUsers = (data: any) => {
-  //     this.users = data;
-  //   };
-  //   private removeUser = (id: string) => {
-  //     this.users = this.users.filter((users) => users.id !== id);
-  //   };
-  //   addUser = (data: any) => {
-  //     this.users = [...this.users, data];
-  //   };
+  private setComments = (data: any) => {
+    this.comments = data;
+  };
   createTask = async (id: any, data: any) => {
     return new Promise((resolve, reject) => {
       axios
@@ -101,6 +96,24 @@ class TaskStore {
         .then(() => {
           console.log('Projects Assigned');
           resolve(true);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(false);
+        });
+    });
+  };
+  // showComments = () .get(` /v1/project/{project}/task/{task}/comment`)
+  showComments = async (projectId: any, taskId: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+
+        .get(`/v1/project/${projectId}/task/${taskId}/comment`)
+        .then(({ data }) => {
+          console.log('✅ comment in store    ', data.data);
+
+          this.setComments(data.data);
+          resolve(data.data);
         })
         .catch((e) => {
           console.log(e);

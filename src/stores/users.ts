@@ -16,8 +16,8 @@ class UserStore {
     this.user = data;
   };
   private setUsers = (data: any) => {
-    // this.users = data;
-    this.users = [...this.users, data];
+    this.users = data;
+    // this.users = [...this.users, data];
   };
   private removeUser = (id: any) => {
     this.users = this.users.filter((user) => user.id !== id);
@@ -62,7 +62,7 @@ class UserStore {
         .put(`/v1/admin/user/${id}`, data)
         .then(({ data }) => {
           // this.setProject(data.data);
-          this.setUsers(data.data);
+          this.addUser(data.data);
 
           resolve(data.data);
         })
