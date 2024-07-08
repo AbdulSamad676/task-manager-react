@@ -6,24 +6,23 @@ import { useStore } from '../stores';
 import { MdAddBox } from 'react-icons/md';
 import ProjectCard from '../components/ProjectCard';
 import AddProjectModal from '../modals/addProjectModal';
-function ProjectManagement() {
+function ProjectManagement(): JSX.Element {
   const { getProjects, createProject, projects, getUserProjects } =
     useStore('projects');
   const { getUsers } = useStore('users');
-  const { role } = useStore('auth');
+  // const { role } = useStore('auth');
+  const [userRole, setUserRole] = useState('');
   const [projectsData, setProjectsData] = useState([]);
-  // const [users, setUsers] = useState([]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  //  Add Project Modal
   const handleAddProjectClick = () => {
     setIsModalVisible(true);
   };
-
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
-
+  // onSubmit modal this function will execute
   const handleSubmitProject = (project: {
     name: string;
     description: string;
@@ -32,7 +31,7 @@ function ProjectManagement() {
       name: project.name,
       description: project.description,
     };
-
+    // Creating a project
     createProject(payload)
       .then((res) => {
         console.log('project added', res);
@@ -45,30 +44,33 @@ function ProjectManagement() {
   };
 
   useEffect(() => {
-    if (role == 'admin') {
-      // for admin
-      getProjects()
-        .then((res) => {
+    const roleLoacal: any = localStorage.getItem('userRole');
+    setUserRole(roleLoacal);
+  }, []);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        console.log('Role::', userRole);
+        if (userRole === 'admin') {
+          const res = await getProjects();
           setProjectsData(res?.data);
-        })
-        .catch((err) => {
-          console.log('ERR:', err);
-        });
-    } else {
-      getUserProjects()
-        .then((res) => {
+        } else {
+          const res = await getUserProjects();
           console.log('response', res);
           setProjectsData(res?.data);
-        })
-        .catch((err) => {
-          console.log('ERR:', err);
-        });
-      // user
+        }
+      } catch (err) {
+        console.log('ERR:', err);
+      }
+    };
+
+    if (userRole) {
+      fetchProjects();
     }
-  }, []);
+  }, [userRole]);
 
   useEffect(() => {
-    if (role == 'admin') {
+    if (userRole == 'admin') {
       getUsers();
     }
   }, []);

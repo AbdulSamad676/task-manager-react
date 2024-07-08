@@ -19,13 +19,8 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
   const commentId = comment.id;
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  //   const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
-  // console.log('project Id:', id);
 
   // Comment Modal:
-  const handleAddCommentClick = () => {
-    setIsModalVisible(true);
-  };
   const handleUpdateCommentClick = () => {
     setIsModalVisible(true);
   };

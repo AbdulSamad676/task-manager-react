@@ -1,7 +1,6 @@
 import { Spin } from 'antd';
 import React, { useState } from 'react';
 import { FaEdit, FaTasks } from 'react-icons/fa';
-import { FaReplyAll } from 'react-icons/fa';
 import { MdAddBox } from 'react-icons/md';
 import { MdAssignmentInd, MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
@@ -22,22 +21,22 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     assignTaskUser,
     showComments,
     createComment,
-    updateComment,
-    deleteComment,
   } = useStore('tasks');
   const { id } = useParams<{ id: string }>(); // Get the project ID from the URL
   const projectId = id;
   const taskId = taskData.id;
-  const [commentID, setCommentID] = useState<string>('');
+
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
   const [isAssignModalVisible, setisAssignModalVisible] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
-  const [addComment, setAddComment] = useState(false);
+
+  // State that control the visibility of the comments
   const [displayComments, setDisplayComments] = useState(false);
   // console.log('project Id:', id);
 
+  // delet a task
   const handleDeleteTask = () => {
     setLoading(true);
     deleteTask(projectId, taskId)
@@ -50,7 +49,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
         setLoading(false);
       });
   };
-
+  // Assign task to user Modal
   const handleAssignModalClick = () => {
     setisAssignModalVisible(true);
   };
@@ -58,15 +57,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
     setisAssignModalVisible(false);
   };
 
-  const handleEditTaskClick = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
-
-  // Assign task
   const assignTask = (userId: any) => {
     console.log('Assigned users ids:', userId);
     const payload = {
@@ -80,6 +70,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
         console.log('✅ ERR    ', err);
       });
   };
+  // Update Task Modal
+  const handleEditTaskClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
   const handleUpdateTask = (task: {
     name: string;
     description: string;
@@ -106,7 +105,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
 
     setIsModalVisible(false);
   };
-
+  // handle show or hide comments
   const handleComments = async () => {
     if (!displayComments) {
       await showComments(projectId, taskId)
@@ -124,13 +123,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
   };
   // Comment Modal:
   const handleAddCommentClick = () => {
-    setAddComment(true);
     setIsCommentModalVisible(true);
   };
-  const handleUpdateCommentClick = () => {
-    setAddComment(false);
-    setIsCommentModalVisible(true);
-  };
+
   const handleCommentCloseModal = () => {
     setIsModalVisible(false);
   };
@@ -143,45 +138,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskData }) => {
       parent_id: null,
       content: commentModaldData.content,
     };
-    // the status means add modal true or false
-    // if status is true then createComment and if false then updateComment
 
     createComment(projectId, taskId, payload)
       .then((res) => {
-        setAddComment(false);
         setIsCommentModalVisible(false);
       })
       .catch((err) => {
         console.log('✅ err in comment   ', err);
-        setAddComment(false);
+
         setIsCommentModalVisible(false);
       });
-
-    // update modal
-    // updateComment(projectId, taskId, commentID, payload)
-    //   .then(() => {
-    //     setAddComment(true);
-    //     setIsCommentModalVisible(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log('✅ err    ', err);
-
-    //     setAddComment(true);
-    //     setIsCommentModalVisible(false);
-    //   });
   };
-  // End
-  // // delete Comment
-  // const handleDeleteComment = (commentID: any) => {
-  //   deleteComment(projectId, taskId, commentID)
-  //     .then((res: any) => {
-  //       console.log('✅ Comment removed    ', res);
-  //     })
-  //     .catch((err) => {
-  //       console.log('✅ err    ', err);
-  //     });
-  //   console.log('Comment ID', commentID);
-  // };
 
   return (
     <div className='taskCard bg-gray-200 shadow-gray-500 p-4 rounded-lg mt-2 relative'>

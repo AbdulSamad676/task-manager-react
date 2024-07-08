@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
-
 import { Spin } from 'antd';
 import { useStore } from '../../../stores';
 import AddUserModal from '../../../modals/addUserModal';
@@ -16,6 +15,7 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const { deleteUser, updateUser } = useStore('users');
 
+  // Delete a user
   const handleDeleteProject = () => {
     setLoading(true);
     deleteUser(data.id)
@@ -30,7 +30,7 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
   };
   // to remove user from a project you can set the user array and then manipulate
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  // Edit/Update User Modal
   const handleEditUserClick = () => {
     setIsModalVisible(true);
   };
@@ -45,7 +45,7 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
     password: string;
     role: string;
   }) => {
-    // Handle the submitted project data
+    // Handle the submitted User data
     const payload = {
       is_active: '1',
       name: user.name,

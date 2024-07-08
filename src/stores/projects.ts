@@ -77,6 +77,8 @@ class ProjectStore {
       axios
         .get('/v1/admin/project')
         .then(({ data }) => {
+          console.log('✅ Projects from store    ', data);
+
           this.setProjects(data.data);
           resolve(data.data);
         })
