@@ -6,7 +6,7 @@ import Header from '../components/Header';
 const DashboardLayout = ({ children, title }) => {
   return (
     <div className='grid grid-cols-12'>
-      <div className='col-span-2  bg-black text-white  h-screen flex justify-center'>
+      <div className='col-span-2  bg-black text-white  h-screen hidden sm:flex justify-center'>
         <Sidebar />
       </div>
 

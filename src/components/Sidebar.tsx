@@ -2,6 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../stores'; // Adjust the path to your MobX store
 import { useEffect, useState } from 'react';
+import { CgProfile } from 'react-icons/cg';
 
 function Sidebar(): JSX.Element {
   const { logoutUser, role } = useStore('auth');
@@ -32,7 +33,8 @@ function Sidebar(): JSX.Element {
       <div className='flex flex-col gap-3 mb-10 w-full'>
         <Link to='/profile'>
           <div className='icons hover:bg-[#333] py-2 px-3 rounded-md w-full'>
-            <p className='text-xs font-bold'>Profile</p>
+            <p className=' text-xs font-bold'>Profile</p>
+            {/* <CgProfile /> */}
           </div>
         </Link>
 
