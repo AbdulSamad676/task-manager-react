@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { IoIosCloseCircle } from 'react-icons/io';
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 const DashboardLayout = ({ children, title }) => {
   const [sidebarShow, setSidebarShow] = useState(false);
@@ -14,11 +15,11 @@ const DashboardLayout = ({ children, title }) => {
           setSidebarShow(true);
         }}
       >
-        Show
+        <GiHamburgerMenu />
       </button>
       {/* mobile */}
       {sidebarShow && (
-        <div className='col-span-2  bg-black text-white  h-screen flex justify-center relative'>
+        <div className='col-span-2  bg-black text-white  h-screen md:hidden flex justify-center relative'>
           <IoIosCloseCircle
             className='absolute top-0 right-0 text-red-500'
             fontSize={20}
@@ -36,10 +37,10 @@ const DashboardLayout = ({ children, title }) => {
 
       <main
         className={`flex flex-col ${
-          sidebarShow ? 'col-span-10' : 'col-span-12'
+          sidebarShow ? 'col-span-10' : 'col-span-12 md:col-span-10'
         }  h-screen overflow-auto`}
       >
-        <h2 className='mb-5 text-2xl font-bold text-center'>
+        <h2 className='mb-5 text-base md:text-2xl font-bold text-center'>
           CodionsLab Task Manager
         </h2>
         <Header title={title} />
