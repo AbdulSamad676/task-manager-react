@@ -104,7 +104,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
 
   return (
     <div className='projectCard p-3 rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-full md:w-[45%] lg:w-[30%]'>
-      <p className='projectName text-xl font-semibold'>{data?.name}</p>
+      <p className='projectName text-sm md:text-xl font-semibold'>
+        {data?.name}
+      </p>
       <p className='text-[12px] font-normal'>{data.description}</p>
       <div className='userTitle flex items-center gap-3 mt-3'>
         {role === 'admin' && <h2 className='text-lg font-bold'>Users</h2>}

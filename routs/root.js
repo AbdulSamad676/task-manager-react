@@ -4,7 +4,7 @@ import Authentication from '../src/pages/Authentication';
 import Profile from '../src/pages/Profile';
 import ProjectManagement from '../src/pages/ProjectManagement';
 // import Taskmanagement from '../src/pages/Taskmanagement';
-import Users from '../src/pages/Users/Users';
+import Users from '../src/pages/Users';
 import ProjectDetails from '../src/pages/ProjectDetails';
 
 export const routesConfig = [

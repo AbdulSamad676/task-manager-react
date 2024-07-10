@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useStore } from '../../stores';
+import { useStore } from '../stores';
 import { observer } from 'mobx-react-lite';
-import UserCard from './components/UserCard';
+// import UserCard from './components/UserCard';
 import { MdAddBox } from 'react-icons/md';
-import AddUserModal from '../../modals/addUserModal';
+import AddUserModal from '../modals/addUserModal';
+import UserCard from '../components/UserCard';
 
 const Users: React.FC = () => {
   const { getUsers, createUser, users } = useStore('users');

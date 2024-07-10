@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { Spin } from 'antd';
-import { useStore } from '../../../stores';
-import AddUserModal from '../../../modals/addUserModal';
+import { useStore } from '../stores';
+import AddUserModal from '../modals/addUserModal';
 
 interface UserCardProps {
   data: any;
@@ -68,8 +68,10 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
   };
 
   return (
-    <div className='UserCard p-3  rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-[45%] lg:w-[30%] '>
-      <p className='projectName text-xl font-semibold '>{data?.name}</p>
+    <div className='UserCard p-3  rounded-md bg-gray-200 text-balance my-2 shadow-lg relative w-full sm:w-[45%] lg:w-[30%] '>
+      <p className='projectName text-sm md:text-xl font-semibold '>
+        {data?.name}
+      </p>
       <p className=' text-[12px]  font-normal '>{data.email}</p>
 
       <div className='buttons mt-3 flex gap-3 justify-end absolute right-2 bottom-2'>
